@@ -69,6 +69,20 @@ variable "single_nat_gateway" {
 
 }
 
+#----------DB Subnet CIDR----------
+# DB subnets are the most isolated tier — RDS lives here, unreachable from internet
+# count must match AZ count — one DB subnet per availability zone for Multi-AZ RDS failover
+variable "db_subnet_cidrs" {
+
+    description = "DB subnet CIDRs — isolated tier for RDS"
+    type = list(string)
+
+    validation {
+      condition = length(var.db_subnet_cidrs) == length(var.azs)
+      error_message = "DB subnet CIDRs must match AZ count"
+    }
+  
+}
 
 
 

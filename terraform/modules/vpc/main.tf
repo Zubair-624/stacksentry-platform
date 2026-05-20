@@ -36,6 +36,8 @@ resource "aws_subnet" "public_subnets" {
     tags = {
         Name = "${var.project_name}-public-subnet-${count.index + 1}"
         Environment = var.environment
+
+        Tier = "public"
     }
 
     availability_zone = var.azs[count.index]
@@ -56,8 +58,11 @@ resource "aws_subnet" "private_subnets" {
 
     tags = {
         Name = "${var.project_name}-private-subnet-${count.index + 1}"
-        Tier = "private"
+
         Environment = var.environment
+
+        Tier = "private"
+    
     }
 
     availability_zone = var.azs[count.index]
@@ -175,4 +180,27 @@ resource "aws_route_table_association" "private" {
 
     count = length(var.azs)
   
+}
+
+#----------DB Subnet----------
+resource "aws_subnet" "db_subnets" {
+
+    vpc_id = aws_vpc.vpc.id
+
+    tags = {
+      Name = "${var.project_name}-db-subnet-${count.index + 1}"
+
+      Environment = var.environment
+
+      Tier = "database"  
+    }
+
+    availability_zone = var.azs[count.index]
+
+    cidr_block = var.db_subnet_cidrs[count.index]
+
+    map_public_ip_on_launch = false 
+
+    count = length(var.db_subnet_cidrs)
+
 }

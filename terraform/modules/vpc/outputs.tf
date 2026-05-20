@@ -67,6 +67,14 @@ output "private_route_table_ids" {
   value = aws_route_table.private_rt[*].id 
 }
 
+#----------DB Subnet IDs----------
+output "db_subnet_ids" {
+
+    description = "DB subnet IDs - passed to RDS module"
+    value = aws_subnet.db_subnets[*].id 
+  
+}
+
 
 
 
